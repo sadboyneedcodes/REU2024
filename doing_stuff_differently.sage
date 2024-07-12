@@ -1,64 +1,41 @@
-import csv
 import ast
 import sage.all as sage
-import logging
+import pandas as pd
 
-# Set up logging
-logging.basicConfig(filename='knots_processing.log', level=logging.INFO, 
-                    format='%(asctime)s %(levelname)s:%(message)s')
+# Read the CSV file
+df = pd.read_csv("/home/cawilson1/REU2024/REU2024-2/test.csv")
 
-def process_csv_chunk(input_file, output_file, start_row, chunk_size):
-    with open(input_file, 'r') as infile:
-        reader = csv.reader(infile)
-        header = next(reader)  # Read the header
-
-        # Skip to the start row
-        for _ in range(start_row):
-            next(reader)
+# Function to compute determinant of Seifert matrix
+def compute_matrix(matrix_str):
+    try:
+                # Convert the matrix string into a list of lists
+        matrix_list = ast.literal_eval(matrix_str)
         
-        with open(output_file, 'a', newline='') as outfile:
-            writer = csv.writer(outfile)
-            if start_row == 0:
-                writer.writerow(header)  # Write the header only for the first chunk
-
-            for i, row in enumerate(reader):
-                if i >= chunk_size:
-                    break
-                if row[1]:  # Check if the Seifert matrix is not empty
-                    try:
-                        seifert_matrix = sage.matrix(sage.SR, ast.literal_eval(row[1]))
-                        det_seifert_matrix = seifert_matrix.det()
-                        row[2] = str(det_seifert_matrix)
-                    except Exception as e:
-                        logging.error(f"Error processing row {start_row + i + 1}: {e}")
-                        row[2] = 'Error'
-
-                writer.writerow(row)  # Write the updated row to the new CSV file
-
-def process_csv_in_chunks(input_file, output_file, chunk_size):
-    start_row = 0
-    while True:
-        logging.info(f"Processing rows {start_row} to {start_row + chunk_size - 1}")
-        process_csv_chunk(input_file, output_file, start_row, chunk_size)
-        start_row += chunk_size
-
-        if start_row % 100 == 0:
-            print(f"Processed {start_row} rows...")
-
-        with open(input_file, 'r') as f:
-            total_rows = sum(1 for _ in f)
-
-        if start_row >= total_rows:
-            break
+        # Initialize the SageMath matrix
+        seifert_matrix = sage.Matrix(matrix_list)
         
-input_file = 'our_data.csv'
-output_file = 'our_data_updated.csv'
-chunk_size = 100  # Adjust chunk size as needed
+        # Calculate determinant
+        determinant_seifert_matrix = seifert_matrix.det()
+        
+        return Integer(determinant_seifert_matrix)
+    except Exception as e:
+        print(f"Error processing matrix {matrix_str}: {e}")
+        return None
 
-# Initialize the output file (create new or truncate existing)
-with open(output_file, 'w') as f:
-    pass
+# Initialize counter
+counter = 0
 
-process_csv_in_chunks(input_file, output_file, chunk_size)
+# Apply the function to the 'seifert_matrix' column and store the results in 'det_seifert_matrix'
+nan_values = ~df['seifert_matrix'].isna()  # Identify NaN values in 'seifert_matrix' column
+for idx, val in df.loc[nan_values, 'seifert_matrix'].items():
+    df.at[idx, 'det_seifert_matrix'] = compute_matrix(val)
+    counter += 1
+    print(f"Processed {counter} matrices")
 
-print("Processing completed. Updated CSV file has been saved as 'knots_updated.csv'")
+# Output debug information
+print("Processing completed.")
+
+df.loc[nan_values, 'det_seifert_matrix'] = df[nan_values].seifert_matrix.apply( lambda x : compute_matrix(x))
+
+# Save the DataFrame to CSV
+df.to_csv("/home/cawilson1/REU2024/REU2024-2/our_data_output.csv", sep=',', index=False)
