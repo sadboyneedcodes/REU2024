@@ -1323,18 +1323,8 @@ def test_white_graph(self):
     #return edges
 
 
-#testing grounds
-L = snappy.Link('9_42')
-
-black, white = test_white_graph(L)
-
-
 def decorate_and_plot_graph(g):
     plot = g.plot(layout = 'spring', dist = 0.15, iterations = 20, edge_labels=True)
     plot.show()
     return g
 
-decorate_and_plot_graph(white)
-decorate_and_plot_graph(black)
-
-L.sage_link().plot().show()
