@@ -12,7 +12,7 @@ import sage.all as sage
 import pandas as pd
 import random
 
-df = pd.read_csv("/home/cawilson1/REU2024/REU2024-2/our_data.csv")
+df = pd.read_csv("/home/cawilson1/REU2024/REU2024-2/test.csv")
 
 nan_values = ~df['seifert_matrix'].isna()
 nan_values.at[int(_sage_const_0 )] = False
