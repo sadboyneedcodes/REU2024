@@ -1323,8 +1323,8 @@ def test_white_graph(self):
     #return edges
 
 
-def decorate_and_plot_graph(g):
-    plot = g.plot(layout = 'spring', dist = 0.15, iterations = 20, edge_labels=True)
+def decorate_and_plot_graph(g, fig):
+    plot = g.plot(layout = 'spring', dist = 0.15, iterations = 20, edge_labels=True, figzise = fig)
     plot.show()
     return g
 
