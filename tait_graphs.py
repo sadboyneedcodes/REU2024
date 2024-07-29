@@ -1303,16 +1303,25 @@ def test_white_graph(self):
     # Map corners (i.e. CrossingStrands) to faces.
     face_of = {corner: n for n, face in enumerate(self.faces())
                 for corner in face}
+    
+    """
+    def signs(C, face_of):
+        if (int(C[0])%2) == (int(C[1])%2) or (int(C[2])%2) == (int(C[3])%2):
+            return -1
+        elif (int(C[1])%2) == (int(C[2])%2) or (int(C[0])%2) == (int(C[3])%2):
+            return 1
+    """
 
     # Create the edges, labeled with crossing and sign.
     edges = []
     for c in self.crossings:
         edges.append((face_of[CrossingStrand(c, 0)],
                         face_of[CrossingStrand(c, 2)],
-                        +1))
+                        -1))
         edges.append((face_of[CrossingStrand(c, 1)],
                         face_of[CrossingStrand(c, 3)],
-                        -1))
+                        1))
+
 
     # Build the graph.
     G = graph.Graph(edges, multiedges=True)
@@ -1321,10 +1330,13 @@ def test_white_graph(self):
         raise ValueError('The link diagram is split.')
     return G.subgraph(components[0]), G.subgraph(components[1])
     #return edges
+    #return G.subgraph(components[1])
 
 
-def decorate_and_plot_graph(g, fig):
-    plot = g.plot(layout = 'spring', dist = 0.15, iterations = 20, edge_labels=True, figzise = fig)
-    plot.show()
-    return g
+def decorate_and_plot_graph(g):
+    plot = g.plot(layout = 'spring', dist = 0.15, iterations = 200, edge_labels=True)
+    plot.show(figsize = 6)
 
+import snappy
+L = snappy.Link('8_19')
+decorate_and_plot_graph(test_white_graph(L)[0])
