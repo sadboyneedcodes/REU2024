@@ -1303,7 +1303,7 @@ def test_white_graph(self):
     # Map corners (i.e. CrossingStrands) to faces.
     face_of = {corner: n for n, face in enumerate(self.faces())
                 for corner in face}
-    
+    print(face_of)
     """
     def signs(C, face_of):
         if (int(C[0])%2) == (int(C[1])%2) or (int(C[2])%2) == (int(C[3])%2):
@@ -1314,6 +1314,7 @@ def test_white_graph(self):
 
     # Create the edges, labeled with crossing and sign.
     edges = []
+    
     for c in self.crossings:
         edges.append((face_of[CrossingStrand(c, 0)],
                         face_of[CrossingStrand(c, 2)],
@@ -1321,7 +1322,7 @@ def test_white_graph(self):
         edges.append((face_of[CrossingStrand(c, 1)],
                         face_of[CrossingStrand(c, 3)],
                         1))
-
+    print(f"edges of white_graph = {edges}")
 
     # Build the graph.
     G = graph.Graph(edges, multiedges=True)
@@ -1339,4 +1340,5 @@ def decorate_and_plot_graph(g):
 
 import snappy
 L = snappy.Link('8_19')
-decorate_and_plot_graph(test_white_graph(L)[0])
+G = test_white_graph(L)[0]
+G.edges()
