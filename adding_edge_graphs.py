@@ -9,7 +9,7 @@ import sage.all as sage
 import pandas as pd
 
 # Read the CSV file
-df = pd.read_csv("/root/Desktop/REU2024/knot_info_inc_PD.csv", sep=';')
+df = pd.read_csv("/home/cawilson1/REU2024/REU2024-2/knot_info_inc_PD.csv", sep=';')
 
 #returns the list of regions with no negative values.
 def abs_regions(self):
