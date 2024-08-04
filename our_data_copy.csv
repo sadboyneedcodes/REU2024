@@ -1,8 +1,0 @@
-name,seifert_matrix,det_seifert_matrix,laplacian,det_laplacian,alexander_polynomial
-Name,Seifert Matrix,Seifert Matrix Determinant,Laplacian,Laplacian Determinant,Alexander
-0_1,,,,,1
-3_1,"[[ -1, 0], [ -1, -1]]",,,,1-t+t^2
-4_1,"[[ 1, 0], [ -1, -1]]",,,,1-3*t+t^2
-5_1,"[[ -1, -1, 0, -1], [ 0, -1, 0, 0], [ -1, -1, -1, -1], [ 0, -1, 0, -1]]",,,,1-t+t^2-t^3+t^4
-5_2,"[[ -1, -1], [ 0, -2]]",,,,2-3*t+2*t^2
-6_1,"[[ 1, 0], [ 1, -2]]",,,,2-5*t+2*t^2
