@@ -1,3 +1,15 @@
+from sage.misc.lazy_import import lazy_import
+lazy_import('sage.knots.knot', ['Knot', 'Knots'])
+lazy_import('sage.knots.link', 'Link')
+
+def from_pd_table(name):
+    if not isinstance(name, str):
+        raise TypeError("Input must be a string.")
+    if name not in knot_table:
+        raise KeyError(f"'{name}' does not exist in the dictionary.")
+    pd_code = knot_table[name]
+    return Knot(pd_code)
+
 knot_table = {
     '3_1' : [[1, 5, 2, 4], [3, 1, 4, 6], [5, 3, 6, 2]] ,
     '4_1' : [[4, 2, 5, 1], [8, 6, 1, 5], [6, 3, 7, 4], [2, 7, 3, 8]] ,
